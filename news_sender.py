@@ -1,3 +1,14 @@
+import smtplib
+import email.mime
+import datetime
+import bs4
+from bs4 import BeautifulSoup
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import requests
+from requests import get
+import re
+
 now = datetime.datetime.now()
 content = ''
 
@@ -23,7 +34,7 @@ def extract_news(url):
 matter = extract_news('https://timesofindia.indiatimes.com/india')
 content = content + matter
 content += ('<br>------------------------------<br>')
-print(content)
+#print(content)
 
 SERVER = 'smtp.gmail.com' # "your smtp server"
 PORT = 587 # your port number
