@@ -17,18 +17,23 @@ def extract_news(url):
   matter = ''
   matter = matter + ('Top News of the day\n' + '<br>' + '-'*60 + '<br>')
   response = requests.get(url)
-  cont = response.content # local variable not same as content outside the function
+  cont = response.content
   soup = BeautifulSoup(cont,'html.parser')  
   idx = 1
   for i,tag in enumerate(soup.find_all('span',attrs={'class':'w_tle'})):
-    for j,tags in enumerate(soup.find_all('a',attrs={'href':re.compile("^https://")})):
-      if tags.text==tag.text:
+    for j,tags in enumerate(soup.find_all('a')):
+      if tags.get('title')==tag.text:
         matter += (('<br>' + str(idx) + ' :: ' + tag.text + "\n" + '<br>'))
         matter += '\n You can find more at : '
-        matter += tags.get('href')
+        link = tags.get('href')
+        if link.count('https://timesofindia.indiatimes.com')==0:
+          link = 'https://timesofindia.indiatimes.com'+link
+        matter += link
         matter += '\n'
         idx = idx + 1
         break
+      else:
+        continue
   return(matter)
 
 matter = extract_news('https://timesofindia.indiatimes.com/india')
